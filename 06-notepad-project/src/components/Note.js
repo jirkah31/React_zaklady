@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './Note.css';
-import ConfirmButton from './ConfirmButton';
+
 
 const Note = () => {
-	const notes = [
+
+	const [notes, setNotes] = useState([
 		{
 			id: 1,
 			headLine: 'Vyvenčit Apola',
@@ -14,25 +15,36 @@ const Note = () => {
 			headLine: 'Uklidit',
 			text: " Pariatur inventore at facere vitae velit eos, repudiandae ea eligendi rem atque dolor, doloremque asperiores facilis obcaecati harum optio illum dolore rerum libero iusto?"
 		}
-	]
+	])
+
 
 	const InputNote = () => {
-		const [headLine, setHeadLine] = useState(" ")
-		const [text, setText] = useState(" ")
+		const [newHeadLine, setHeadLine] = useState(" ")
+		const [newText, setText] = useState(" ")
+
+		const handleSubmit = () => {
+			setNotes( current => [...current, {
+				id: Math.max(...notes.map(note => note.id)) + 1,
+				headLine: newHeadLine,
+				text: newText
+			}]
+			)
+		}
 
 		return (
 			<form className='note'>
 				<input id="headLine" type="text" onChange={event => setHeadLine(event.target.value)} />
 				<input id="text" type="text" onChange={event => setText(event.target.value)} />
-				<ConfirmButton />
+				<button type="submit" className="confirmButton" onClick={handleSubmit}>Zapsat poznámku</button>
 			</form>
 		)
 	}
 
+
 	const Note = () => {
 		return (
 			<div>
-				{notes.map(({headLine, text, id})=>( 
+				{notes.map(({ headLine, text, id }) => (
 					<div key={id} className='note'>
 						<h1>{headLine}</h1>
 						<p>{text}</p>
@@ -42,10 +54,10 @@ const Note = () => {
 		)
 	}
 
-
 	return (
 		<div>
 			<Note />
+			{/* {console.log(notes)}  kontrola, že v notes je to stejný jako je vykreslený */}
 			<InputNote />
 		</div>
 	)
