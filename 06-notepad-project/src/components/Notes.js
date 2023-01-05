@@ -3,6 +3,7 @@ import './Notes.scss';
 import { FaTrashAlt } from 'react-icons/fa'
 import { FaRegEdit } from 'react-icons/fa'
 import InputNote from './InputNote'
+import EditMyNote from './EditMyNote'
 
 const Notes = (props) => {
 	/*  ÚKOLY
@@ -13,6 +14,8 @@ const Notes = (props) => {
 		+přidat datum poznámky
 		*/
 	const data = JSON.parse(localStorage.getItem("notes"))
+
+	const [editId, setEditId] = useState()
 
 	const [newHeadLine, setHeadLine] = useState("")
 	const [newText, setText] = useState("")
@@ -32,6 +35,7 @@ const Notes = (props) => {
 
 	const HandleSubmit = (event) => {
 		event.preventDefault()
+
 		if (newHeadLine && newText) {
 			setNotes(notes => [...notes, {
 				id: SetId(),
@@ -59,17 +63,11 @@ const Notes = (props) => {
 		setNotes(notes.filter(note => note.id !== id))
 	}
 
-	const removeAllNotes = () => {
-		console.log("rmeove all notes")
+	const EditNote = () => {
+		props.showEditNote()
 	}
 
-	const EditNote = id => {
-		console.log("edit")
-	}
-
-	useEffect(()=>{
-		removeAllNotes(removeAllNotes)
-	})
+	
 
 	const Note = () => {
 		SetLocalStorage()
@@ -78,7 +76,7 @@ const Notes = (props) => {
 				{notes.map(({ headLine, text, id }) => (
 					<div key={id} className='note'>
 						<nav>
-							<button type='button' onClick={() => EditNote(id)}><FaRegEdit /></button>
+							<button type='button' onClick={() => {EditNote(); setEditId(id) }}><FaRegEdit /></button>
 							<button type='button' onClick={() => DeleteNote(id)}><FaTrashAlt /></button>
 						</nav>
 
@@ -93,7 +91,11 @@ const Notes = (props) => {
 	return (
 		<div className='container'>
 			<Note />
+			{props.showEdit && <EditMyNote hideEditNote={props.hideEditNote} editId={editId} />}
 			{props.showInput && <InputNote handleSubmit={HandleSubmit} setNewHeadLine={setNewHeadLine} setNewText={setNewText} hideInputNote={props.hideInputNote} />}
+
+
+			{/* <EditNote handleSubmit={HandleSubmit} setNewHeadLine={setNewHeadLine} setNewText={setNewText} hideEditNote={props.hideEditNote} /> */}
 		</div>
 	)
 }

@@ -4,8 +4,14 @@ import './InputNote.scss'
 export default function InputNote(props) {
 
 	const confirmBtn = (event) => {
-		props.handleSubmit(event)
-		props.hideInputNote(event)
+		const inputHeadLine = document.getElementById("head-line").value.length
+		const inputText = document.getElementById("text").value.length
+		event.preventDefault()
+
+		if (inputHeadLine && inputText) {
+			props.handleSubmit(event)
+			props.hideInputNote(event)
+		}
 	}
 
 	return (
